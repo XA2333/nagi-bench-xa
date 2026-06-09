@@ -27,8 +27,22 @@ const CursorGlow = memo(function CursorGlow() {
         ringX(e.clientX)
         ringY(e.clientY)
       })
+      // Iframes swallow pointer events, so the follower would freeze on top
+      // of a running artifact; fade it out while the pointer is over one.
+      const setHidden = (hidden: boolean) =>
+        gsap.to([dot, ring], { autoAlpha: hidden ? 0 : 1, duration: 0.2, overwrite: 'auto' })
+      const onOver = contextSafe((e: PointerEvent) => {
+        setHidden((e.target as Element | null)?.tagName === 'IFRAME')
+      })
+      const onDocLeave = contextSafe(() => setHidden(true))
       window.addEventListener('pointermove', onMove)
-      return () => window.removeEventListener('pointermove', onMove)
+      window.addEventListener('pointerover', onOver)
+      document.documentElement.addEventListener('mouseleave', onDocLeave)
+      return () => {
+        window.removeEventListener('pointermove', onMove)
+        window.removeEventListener('pointerover', onOver)
+        document.documentElement.removeEventListener('mouseleave', onDocLeave)
+      }
     },
     { scope },
   )

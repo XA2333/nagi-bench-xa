@@ -42,7 +42,7 @@ export const MODELS: ModelDef[] = [
   { id: 'gpt-5-5-xhigh', label: 'GPT-5.5 xhigh', vendor: 'OpenAI', status: 'ran' },
   { id: 'gemini-3-1-pro', label: 'Gemini 3.1 Pro', vendor: 'Google', status: 'ran' },
   { id: 'gemini-3-5-flash', label: 'Gemini 3.5 Flash', vendor: 'Google', status: 'ran' },
-  { id: 'grok-build', label: 'Grok 4.3', vendor: 'xAI', status: 'ran' },
+  { id: 'grok-build', label: 'Grok Build', vendor: 'xAI', status: 'ran' },
   { id: 'composer-2-5', label: 'Composer 2.5', vendor: 'Cursor', status: 'ran' },
   { id: 'mistral-medium-3-5', label: 'Mistral Medium 3.5', vendor: 'Mistral AI', status: 'pending' },
   { id: 'deepseek-v4-pro', label: 'DeepSeek-V4-Pro', vendor: 'DeepSeek', status: 'pending' },
@@ -120,14 +120,14 @@ export const RUNS: Record<string, Record<string, RunDef>> = {
     },
     'grok-build': {
       note: {
-        zh: '在本地通过 Grok Build（TUI）开发实现；本页为修复版（仅改 2 行）。问题一：第 82 行 const WORLD_SEED = 0xAETHER，T/H/R 不是十六进制字符，整段脚本解析即抛 SyntaxError。修复前：画面纯黑，只剩 HTML 文字。问题二：贴图集画在 canvas 顶部两行、UV 按左上原点计算，却未设 flipY=false，所有面采样到未绘制的黑色区域。修复前：进入世界后近处地形全黑。两处各改一行（合法种子 + flipY=false），其余保持 Grok 原样。',
-        en: 'Built locally with the Grok Build TUI; fixed build (2 lines changed). Bug 1: line 82 const WORLD_SEED = 0xAETHER — T/H/R are not hex digits, so the whole script threw a SyntaxError at parse time; before the fix the screen was pure black with only HTML text. Bug 2: the atlas is drawn in the top canvas rows with top-left-origin UVs but no flipY=false, so every face sampled the undrawn black region; before the fix nearby terrain rendered solid black. One line each (a valid seed + flipY=false); everything else is Grok as-is.',
+        zh: '在本地通过 Grok Build（TUI）开发实现；本页为修复版（共改 3 行）。问题一：第 82 行 const WORLD_SEED = 0xAETHER，T/H/R 不是十六进制字符，整段脚本解析即抛 SyntaxError——修复前画面纯黑，只剩 HTML 文字。问题二：贴图集画在 canvas 顶部两行、UV 按左上原点计算，却未设 flipY=false，所有面采样到未绘制的黑色区域——修复前进入世界后近处地形全黑。问题三：forward 向量已指向相机朝向，按键却写成 W 减、S 加——修复前按 W 后退、按 S 前进（A/D 正常）。三处均为一行级修正，其余保持 Grok 原样。',
+        en: 'Built locally with the Grok Build TUI; fixed build (3 lines changed). Bug 1: line 82 const WORLD_SEED = 0xAETHER — T/H/R are not hex digits, so the whole script threw a SyntaxError at parse time; before the fix the screen was pure black with only HTML text. Bug 2: the atlas is drawn in the top canvas rows with top-left-origin UVs but no flipY=false, so every face sampled the undrawn black region; before the fix nearby terrain rendered solid black. Bug 3: the forward vector already points where the camera looks, but W subtracted and S added — W walked backward (A/D were fine). One line each; everything else is Grok as-is.',
       },
     },
     'composer-2-5': {
       note: {
-        zh: '在 Cursor 中以 Composer 2.5 生成；本页为修复版（仅改 1 行）。问题：第 1152 行水平速度先乘 speed*dt，位移时又乘一次 dt，实际步速只有设计值（5 格/秒）的约 1/60。修复前：走路如蜗牛、跳跃下落却正常；沙漠雪地等群系与神话建筑实际走不到，体感像「切换不了场景」——游戏本无传送功能，群系需步行抵达。原因：X/Z 轴把「每帧位移」当「每秒速度」存入 velocity，与 Y 轴语义不一致。去掉一次 dt 后步行恢复 5 格/秒，可正常走到其他群系。',
-        en: 'Generated with Composer 2.5 in Cursor; fixed build (1 line changed). Bug: line 1152 multiplied horizontal velocity by speed*dt, then displacement multiplied by dt again, leaving walking at ~1/60 of the designed 5 blocks/s. Before the fix: walking crawled while jumping/falling felt normal, and biomes or mythic structures were effectively unreachable — which read as "scene switching is broken" (there is no teleport; biomes are reached on foot). Cause: X/Z stored per-frame displacement in a per-second velocity field, inconsistent with the Y axis. With one dt removed, walking is back to 5 blocks/s and other biomes are reachable.',
+        zh: '在 Cursor 中以 Composer 2.5 生成；本页为修复版（改 1 行）+ 补一个小功能。问题：第 1152 行水平速度先乘 speed*dt，位移时又乘一次 dt，实际步速只有设计值（5 格/秒）的约 1/60。修复前：走路如蜗牛、跳跃下落却正常；沙漠雪地等群系与神话建筑实际走不到，体感像「切换不了场景」——游戏本无传送功能，群系需步行抵达。原因：X/Z 轴把「每帧位移」当「每秒速度」存入 velocity，与 Y 轴语义不一致。去掉一次 dt 后步行恢复 5 格/秒。另外它确实生成了精灵螺旋塔、龙神殿、天空遗迹三处景点（也画在小地图上），但原版只能徒步抵达——已补加按 G 依次瞬移到三处景点的功能，开屏说明里也加了一行。',
+        en: 'Generated with Composer 2.5 in Cursor; fixed build (1 line changed) plus one small addition. Bug: line 1152 multiplied horizontal velocity by speed*dt, then displacement multiplied by dt again, leaving walking at ~1/60 of the designed 5 blocks/s. Before the fix: walking crawled while jumping/falling felt normal, and biomes or mythic structures were effectively unreachable — which read as "scene switching is broken" (there is no teleport; biomes are reached on foot). Cause: X/Z stored per-frame displacement in a per-second velocity field, inconsistent with the Y axis. With one dt removed walking is back to 5 blocks/s. It does generate three landmarks (Elven Spiral Tower, Dragon Temple, Sky Ruins — also drawn on the minimap) that were only reachable on foot, so a G-key cycle-teleport to them was added, with a line in the start screen.',
       },
     },
   },

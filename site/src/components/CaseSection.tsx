@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Check, Copy, ExternalLink, Play } from 'lucide-react'
+import { Check, Copy, ExternalLink, Maximize2, Play } from 'lucide-react'
 import { gsap, useGSAP, SplitText, prefersReducedMotion, hasFinePointer } from '../lib/gsap'
 import { useLang } from '../i18n'
 import {
@@ -22,13 +22,22 @@ function Spinner({ label }: { label: string }) {
   )
 }
 
-function FrameFooter({ path }: { path: string }) {
+function FrameFooter({ path, onFullscreen }: { path: string; onFullscreen?: () => void }) {
   const { t } = useLang()
   const file = path.split('/').pop() ?? path
   return (
     <div className="text-dim mt-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[11px]">
       <span className="truncate">{file}</span>
       <span className="flex items-center gap-4">
+        {onFullscreen && (
+          <button
+            onClick={onFullscreen}
+            className="hover:text-accent inline-flex items-center gap-1.5 transition-colors"
+          >
+            <Maximize2 className="size-3" />
+            {t('case.fullscreen')}
+          </button>
+        )}
         <a
           href={outputUrl(path)}
           target="_blank"
@@ -93,8 +102,15 @@ function SvgViewer({ path, label }: { path: string; label: string }) {
 function HtmlViewer({ path, label }: { path: string; label: string }) {
   const { t } = useLang()
   const [phase, setPhase] = useState<'idle' | 'loading' | 'ready'>('idle')
+  const frameRef = useRef<HTMLDivElement>(null)
   const coverRef = useRef<HTMLButtonElement>(null)
   const circleRef = useRef<HTMLSpanElement>(null)
+
+  const run = () => {
+    setPhase('loading')
+    frameRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+  const goFullscreen = () => frameRef.current?.requestFullscreen?.()
 
   // Magnetic pull on the play circle while the pointer roams the cover.
   useGSAP(
@@ -126,11 +142,14 @@ function HtmlViewer({ path, label }: { path: string; label: string }) {
 
   return (
     <div>
-      <div className="border-line bg-ink-2 relative mt-6 aspect-video w-full overflow-hidden border">
+      <div
+        ref={frameRef}
+        className="border-line bg-ink-2 relative mt-6 aspect-video max-h-[calc(100dvh-10rem)] w-full overflow-hidden border [&:fullscreen]:aspect-auto [&:fullscreen]:max-h-none"
+      >
         {phase === 'idle' ? (
           <button
             ref={coverRef}
-            onClick={() => setPhase('loading')}
+            onClick={run}
             className="group absolute inset-0 flex flex-col items-center justify-center gap-5"
           >
             <span
@@ -147,6 +166,14 @@ function HtmlViewer({ path, label }: { path: string; label: string }) {
         ) : (
           <>
             {phase === 'loading' && <Spinner label={t('case.loading')} />}
+            <button
+              onClick={goFullscreen}
+              title={t('case.fullscreen')}
+              aria-label={t('case.fullscreen')}
+              className="border-line bg-ink/70 text-dim hover:text-accent absolute top-3 right-3 z-20 flex size-9 items-center justify-center border backdrop-blur-sm transition-colors"
+            >
+              <Maximize2 className="size-4" />
+            </button>
             <iframe
               src={outputUrl(path)}
               title={label}
@@ -159,7 +186,7 @@ function HtmlViewer({ path, label }: { path: string; label: string }) {
           </>
         )}
       </div>
-      <FrameFooter path={path} />
+      <FrameFooter path={path} onFullscreen={phase === 'idle' ? undefined : goFullscreen} />
     </div>
   )
 }
@@ -411,7 +438,10 @@ export default function CaseSection({ caseDef }: { caseDef: CaseDef }) {
             </div>
           </div>
 
-          <div data-frame>
+          <div
+            data-frame
+            className="xl:relative xl:left-1/2 xl:w-[min(100vw-3rem,90rem)] xl:-translate-x-1/2"
+          >
             <div data-viewer key={`${caseDef.id}-${activeModelId}`}>
               <Viewer caseDef={caseDef} model={activeModel} run={run} />
             </div>
