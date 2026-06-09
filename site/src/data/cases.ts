@@ -35,17 +35,19 @@ export const REPO_URL = 'https://github.com/nagi-studio/nagi-bench'
 // (Feb 19, still the Pro flagship), Grok 4.3 (late Apr), Mistral Medium 3.5
 // (Apr 28), DeepSeek-V4-Pro (Apr 24), Kimi K2.6 (Apr 20; K2.7 does not
 // exist), MiniMax M3 (Jun 1), GLM-5.1 (Mar 27), Qwen3.7-Max (May 20).
+// Ids are dash-only so they double as outputs/ folder names.
 export const MODELS: ModelDef[] = [
   { id: 'claude-fable-5', label: 'Claude Fable 5', vendor: 'Anthropic', status: 'ran' },
-  { id: 'gpt-5.5', label: 'GPT-5.5', vendor: 'OpenAI', status: 'pending' },
-  { id: 'gemini-3.1-pro', label: 'Gemini 3.1 Pro', vendor: 'Google', status: 'pending' },
-  { id: 'grok-4.3', label: 'Grok 4.3', vendor: 'xAI', status: 'pending' },
-  { id: 'mistral-medium-3.5', label: 'Mistral Medium 3.5', vendor: 'Mistral AI', status: 'pending' },
+  { id: 'gemini-3-1-pro', label: 'Gemini 3.1 Pro', vendor: 'Google', status: 'ran' },
+  { id: 'grok-build', label: 'Grok 4.3', vendor: 'xAI', status: 'ran' },
+  { id: 'composer-2-5', label: 'Composer 2.5', vendor: 'Cursor', status: 'ran' },
+  { id: 'gpt-5-5', label: 'GPT-5.5', vendor: 'OpenAI', status: 'pending' },
+  { id: 'mistral-medium-3-5', label: 'Mistral Medium 3.5', vendor: 'Mistral AI', status: 'pending' },
   { id: 'deepseek-v4-pro', label: 'DeepSeek-V4-Pro', vendor: 'DeepSeek', status: 'pending' },
-  { id: 'kimi-k2.6', label: 'Kimi K2.6', vendor: 'Moonshot AI', status: 'pending' },
+  { id: 'kimi-k2-6', label: 'Kimi K2.6', vendor: 'Moonshot AI', status: 'pending' },
   { id: 'minimax-m3', label: 'MiniMax M3', vendor: 'MiniMax', status: 'pending' },
-  { id: 'glm-5.1', label: 'GLM-5.1', vendor: 'Zhipu AI', status: 'pending' },
-  { id: 'qwen3.7-max', label: 'Qwen3.7-Max', vendor: 'Alibaba', status: 'pending' },
+  { id: 'glm-5-1', label: 'GLM-5.1', vendor: 'Zhipu AI', status: 'pending' },
+  { id: 'qwen3-7-max', label: 'Qwen3.7-Max', vendor: 'Alibaba', status: 'pending' },
 ]
 
 export const CASES: CaseDef[] = [
@@ -88,6 +90,14 @@ export const RUNS: Record<string, Record<string, RunDef>> = {
       note: {
         zh: '在 Claude 网页版以 Fable 5 Max（最高思考强度）运行，过程中触发一次 auto compact 与工具调用上限，手动输入「继续」后完成；ID 水印与英文支持为事后在 Cursor 中用 Composer 2.5 Fast 一条提示词补加，其余均为一次生成。',
         en: 'Run in the Claude web app on Fable 5 Max (max thinking effort); hit one auto-compact and the tool-call limit mid-run, finished after a manual "continue". The ID watermark and English support were patched in afterwards with a single prompt via Composer 2.5 Fast in Cursor; everything else is one-shot.',
+      },
+    },
+    'gemini-3-1-pro': {},
+    'grok-build': {},
+    'composer-2-5': {
+      note: {
+        zh: '在 Cursor 中以 Composer 2.5 生成。',
+        en: 'Generated with Composer 2.5 in Cursor.',
       },
     },
   },
