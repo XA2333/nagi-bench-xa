@@ -7,6 +7,7 @@ import {
   RUNS,
   REPO_URL,
   outputUrl,
+  runPath,
   type CaseDef,
   type ModelDef,
   type RunDef,
@@ -166,11 +167,12 @@ function HtmlViewer({ path, label }: { path: string; label: string }) {
 function Viewer({ caseDef, model, run }: { caseDef: CaseDef; model: ModelDef; run?: RunDef }) {
   const { pick } = useLang()
   if (!run) return <EmptyState />
+  const path = runPath(caseDef, model.id, run)
   const label = `${pick(caseDef.title)} - ${model.label}`
   return caseDef.kind === 'svg' ? (
-    <SvgViewer path={run.path} label={label} />
+    <SvgViewer path={path} label={label} />
   ) : (
-    <HtmlViewer path={run.path} label={label} />
+    <HtmlViewer path={path} label={label} />
   )
 }
 
@@ -178,10 +180,21 @@ export default function CaseSection({ caseDef }: { caseDef: CaseDef }) {
   const { t, pick, lang } = useLang()
   const scope = useRef<HTMLElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
-  const [activeModelId, setActiveModelId] = useState(MODELS[0].id)
+  // Deep link: #<case-id> anchors the case, #<case-id>:<model-id> also
+  // preselects the model tab.
+  const [activeModelId, setActiveModelId] = useState(() => {
+    const [caseId, modelId] = window.location.hash.slice(1).split(':')
+    if (caseId === caseDef.id && modelId && MODELS.some((m) => m.id === modelId)) return modelId
+    return MODELS[0].id
+  })
   const activeModel = MODELS.find((m) => m.id === activeModelId) ?? MODELS[0]
   const run = RUNS[caseDef.id]?.[activeModelId]
   const [copied, setCopied] = useState(false)
+
+  const selectModel = (modelId: string) => {
+    setActiveModelId(modelId)
+    history.replaceState(null, '', `#${caseDef.id}:${modelId}`)
+  }
 
   useEffect(() => {
     if (!copied) return
@@ -328,7 +341,7 @@ export default function CaseSection({ caseDef }: { caseDef: CaseDef }) {
                   key={m.id}
                   role="tab"
                   aria-selected={m.id === activeModelId}
-                  onClick={() => setActiveModelId(m.id)}
+                  onClick={() => selectModel(m.id)}
                   className={`inline-flex items-center gap-1.5 border px-2.5 py-1 font-mono text-[11px] transition-colors ${
                     m.id === activeModelId
                       ? 'border-accent text-accent'

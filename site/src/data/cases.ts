@@ -21,10 +21,12 @@ export type CaseDef = {
   tags: string[]
 }
 
-// A model's artifact for one case, plus run-specific notes.
+// A model's artifact for one case, plus run-specific notes. By convention the
+// artifact lives at outputs/<model-id>/<case-id>.<kind>; set `file` only when
+// the filename deviates from that.
 export type RunDef = {
-  path: string // relative to the site root
   note?: Bilingual
+  file?: string
 }
 
 export const REPO_URL = 'https://github.com/nagi-studio/nagi-bench'
@@ -79,11 +81,10 @@ export const CASES: CaseDef[] = [
   },
 ]
 
-// case id -> model id -> run (artifact path + per-model run notes)
+// case id -> model id -> run (per-model run notes; artifact path is derived)
 export const RUNS: Record<string, Record<string, RunDef>> = {
   'mythos-craft': {
     'claude-fable-5': {
-      path: 'outputs/claude-fable-5/mythos-craft.html',
       note: {
         zh: '在 Claude 网页版以 Fable 5 Max（最高思考强度）运行，过程中触发一次 auto compact 与工具调用上限，手动输入「继续」后完成；ID 水印与英文支持为事后在 Cursor 中用 Composer 2.5 Fast 一条提示词补加，其余均为一次生成。',
         en: 'Run in the Claude web app on Fable 5 Max (max thinking effort); hit one auto-compact and the tool-call limit mid-run, finished after a manual "continue". The ID watermark and English support were patched in afterwards with a single prompt via Composer 2.5 Fast in Cursor; everything else is one-shot.',
@@ -92,7 +93,6 @@ export const RUNS: Record<string, Record<string, RunDef>> = {
   },
   'pelican-cycling': {
     'claude-fable-5': {
-      path: 'outputs/claude-fable-5/pelican_cycling_by_the_sea.svg',
       note: {
         zh: '在 Claude 网页版以 Fable 5 Max（最高思考强度）一次生成。',
         en: 'Generated in one shot in the Claude web app on Fable 5 Max (max thinking effort).',
@@ -100,5 +100,8 @@ export const RUNS: Record<string, Record<string, RunDef>> = {
     },
   },
 }
+
+export const runPath = (caseDef: CaseDef, modelId: string, run: RunDef) =>
+  `outputs/${modelId}/${run.file ?? `${caseDef.id}.${caseDef.kind}`}`
 
 export const outputUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`

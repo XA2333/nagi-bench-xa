@@ -2,7 +2,7 @@
 // capture a full-page screenshot.
 import puppeteer from 'puppeteer-core'
 
-const url = process.argv[2] ?? 'http://localhost:4173/nagi-bench/'
+const url = process.argv[2] ?? 'http://localhost:4173/'
 const shot = process.argv[3] ?? '/tmp/nagi-bench-full.png'
 const theme = process.argv[4]
 

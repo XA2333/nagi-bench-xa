@@ -2,7 +2,7 @@
 // errors, and verify the hero intro animation actually completes.
 import puppeteer from 'puppeteer-core'
 
-const url = process.argv[2] ?? 'http://localhost:4173/nagi-bench/'
+const url = process.argv[2] ?? 'http://localhost:4173/'
 const shot = process.argv[3] ?? '/tmp/nagi-bench-live.png'
 const theme = process.argv[4] // optional: 'light' | 'dark'
 

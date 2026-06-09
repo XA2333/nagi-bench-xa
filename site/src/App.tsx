@@ -18,6 +18,14 @@ function Shell() {
     ScrollTrigger.refresh()
   }, [lang])
 
+  useEffect(() => {
+    // Deep links (#<case-id> or #<case-id>:<model-id>) point at elements that
+    // do not exist until React mounts, so scroll to them manually once.
+    const caseId = window.location.hash.slice(1).split(':')[0]
+    if (!caseId) return
+    document.getElementById(caseId)?.scrollIntoView()
+  }, [])
+
   return (
     <div className="bg-blueprint min-h-[100dvh]">
       <TopBar />
