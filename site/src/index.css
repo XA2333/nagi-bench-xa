@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-ink: #0a0a0e;
+  --color-ink-2: #111118;
+  --color-paper: #ecece4;
+  --color-dim: #84848e;
+  --color-acid: #c8f031;
+  --color-amber: #e8a33d;
+  --color-line: rgb(236 236 228 / 0.12);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-acid);
+  color: var(--color-ink);
+}
+
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-paper);
+}
+
+@utility text-outline-faint {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(236 236 228 / 0.18);
+}
+
+@utility bg-blueprint {
+  background-image:
+    linear-gradient(rgb(236 236 228 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(236 236 228 / 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.82); }
+}
+
+.dot-breathe {
+  animation: breathe 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .dot-breathe { animation: none; }
+}
