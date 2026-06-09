@@ -4,7 +4,7 @@ NAGI STUDIO 的 LLM 测评案例集：同一段提示词，不同模型，一次
 
 One-shot LLM eval cases by NAGI STUDIO: same prompt, different models, one attempt and no retries — a side-by-side record of the runnable artifacts they ship.
 
-**Live site:** https://nagi-studio.github.io/nagi-bench/
+**Live site:** https://bench.nagi.fun/
 
 ## 结构 / Structure
 
