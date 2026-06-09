@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0a0a0e;
+    --ink2: #111118;
+    --paper: #ecece4;
+    --dim: #84848e;
+    --acid: #c8f031;
+    --night: #0a0a0e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: "Space Grotesk", "PingFang SC", sans-serif;
+    background-image:
+      linear-gradient(rgb(236 236 228 / 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(236 236 228 / 0.045) 1px, transparent 1px);
+    background-size: 48px 48px;
+    position: relative;
+  }
+  .mono { font-family: "JetBrains Mono", monospace; }
+  .frame {
+    position: absolute;
+    inset: 0;
+    padding: 56px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .sq { width: 16px; height: 16px; background: var(--acid); }
+  .top .url { color: var(--dim); font-weight: 400; letter-spacing: 0.12em; }
+  .title { line-height: 0.92; font-weight: 700; letter-spacing: -0.02em; text-transform: uppercase; }
+  .title .solid { display: block; font-size: 168px; }
+  .row2 { display: flex; align-items: center; gap: 36px; margin-top: 6px; }
+  .title .outline {
+    font-size: 168px;
+    color: transparent;
+    -webkit-text-stroke: 2.5px var(--paper);
+  }
+  .badge {
+    display: inline-block;
+    background: var(--acid);
+    color: var(--night);
+    font-family: "JetBrains Mono", "PingFang SC", monospace;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 12px 18px;
+    transform: rotate(-3deg);
+    white-space: nowrap;
+  }
+  .bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 48px; }
+  .tagline { font-size: 23px; line-height: 1.55; color: var(--dim); max-width: 660px; }
+  .tagline b { color: var(--paper); font-weight: 500; }
+  .stats { text-align: right; font-size: 15px; letter-spacing: 0.28em; color: var(--acid); white-space: nowrap; }
+  .stats .models { margin-top: 10px; color: var(--dim); letter-spacing: 0.14em; font-size: 13px; }
+  .strip {
+    position: absolute;
+    left: -2%;
+    right: -2%;
+    top: 318px;
+    transform: rotate(-1.4deg);
+    background: var(--acid);
+    color: var(--night);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    padding: 9px 0;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+</style>
+</head>
+<body>
+  <div class="strip mono">
+    &nbsp;CLAUDE FABLE 5 [RAN] &middot; GPT-5.5 PRO [RAN] &middot; GPT-5.5 XHIGH [RAN] &middot; GEMINI 3.1 PRO [RAN] &middot; GEMINI 3.5 FLASH [RAN] &middot; GROK BUILD [RAN] &middot; COMPOSER 2.5 [RAN] &middot; DEEPSEEK-V4-PRO [PENDING] &middot; KIMI K2.6 [PENDING] &middot; MINIMAX M3 [PENDING]
+  </div>
+  <div class="frame">
+    <div class="top mono">
+      <div class="brand"><span class="sq"></span>NAGI BENCH</div>
+      <div class="url">bench.nagi.fun</div>
+    </div>
+    <div class="title">
+      <span class="solid">NAGI</span>
+      <div class="row2">
+        <span class="outline">BENCH</span>
+        <span class="badge">一次性生成 · 可运行作品</span>
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="tagline">
+        同一段提示词，不同模型，<b>一次生成、不许返工</b>——可运行作品并排对比。<br />
+        Same prompt, different models, one shot — runnable artifacts side by side.
+      </div>
+      <div class="stats mono">
+        ONE-SHOT LLM EVALS
+        <div class="models">02 CASES &middot; 07 MODELS RAN</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

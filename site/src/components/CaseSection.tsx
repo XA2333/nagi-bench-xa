@@ -415,26 +415,31 @@ export default function CaseSection({ caseDef }: { caseDef: CaseDef }) {
                 aria-hidden
                 className="bg-accent invisible absolute top-0 left-0 h-[2px] w-8"
               />
-              {MODELS.map((m) => (
-                <button
-                  key={m.id}
-                  role="tab"
-                  aria-selected={m.id === activeModelId}
-                  onClick={() => selectModel(m.id)}
-                  className={`inline-flex items-center gap-1.5 border px-2.5 py-1 font-mono text-[11px] transition-colors ${
-                    m.id === activeModelId
-                      ? 'border-line text-accent'
-                      : 'text-dim hover:text-paper border-transparent'
-                  }`}
-                >
-                  <span
-                    className={`size-1.5 rounded-full ${
-                      m.status === 'ran' ? 'bg-accent' : 'bg-amber dot-breathe'
+              {MODELS.map((m) => {
+                // The dot reflects whether THIS model has a run for THIS case,
+                // not its global status.
+                const hasRun = Boolean(RUNS[caseDef.id]?.[m.id])
+                return (
+                  <button
+                    key={m.id}
+                    role="tab"
+                    aria-selected={m.id === activeModelId}
+                    onClick={() => selectModel(m.id)}
+                    className={`inline-flex items-center gap-1.5 border px-2.5 py-1 font-mono text-[11px] transition-colors ${
+                      m.id === activeModelId
+                        ? 'border-line text-accent'
+                        : 'text-dim hover:text-paper border-transparent'
                     }`}
-                  />
-                  {m.label}
-                </button>
-              ))}
+                  >
+                    <span
+                      className={`size-1.5 rounded-full ${
+                        hasRun ? 'bg-accent' : 'bg-amber dot-breathe'
+                      }`}
+                    />
+                    {m.label}
+                  </button>
+                )
+              })}
             </div>
           </div>
 
